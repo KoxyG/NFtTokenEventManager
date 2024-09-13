@@ -69,8 +69,8 @@ contract NFTGatedEventManager  {
 
         uint256 tokenId = nftContract.nextTokenID()
 
-        // research if token ID can be sent to multiple users
-        nftContract.safeTransferFrom(address(this), msg.sender, tokenId);
+    
+        nftContract.transferFrom(address(this), msg.sender, tokenId);
 
         eventToRegister.registeredAttendees[msg.sender] = true;
         eventToRegister.registeredCount++;
