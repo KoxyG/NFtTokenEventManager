@@ -9,9 +9,9 @@ contract NftOnchainFactory {
 
 
 
-    function createNftOnchainFactory() external returns (NftOnchainFactory newNft_, uint256 length_) {
+    function createNftOnchainFactory(string memory svg) external returns (NftOnchainFactory newNft_, uint256 length_) {
 
-        newNft_ = new NftOnchainFactory();
+        newNft_ = new NftOnchain(svg);
 
         nftOnchainFactoryClones.push(newNft_);
 

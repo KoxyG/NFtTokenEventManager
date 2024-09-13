@@ -24,6 +24,11 @@ contract NFTGatedEventManager  {
 
 
     uint256 public eventId;
+    address public nftContract;
+
+     constructor(address _nftContract) {
+        nftContract = _nftContract;
+    }
 
 
     //blockchain events 
@@ -32,18 +37,23 @@ contract NFTGatedEventManager  {
 
 
     
-    function createEvent(string memory _name, uint256 _date, uint256 _capacity, address _nftContract) external {
+    function createEvent(string memory _name, uint256 _date, uint256 _capacity) external {
         require(_date > block.timestamp, "Event date must be in the future");
         require(_capacity > 0, "Capacity must be greater than zero");
         require(_nftContract != address(0), "Invalid NFT contract address");
+
+        IERC721 _nftContract = IERC721(nftContract);
+
 
         eventId++;
         Event storage newEvent = events[eventId];
         newEvent.name = _name;
         newEvent.date = _date;
         newEvent.capacity = _capacity;
-        newEvent.nftContract = _nftContract;
+        newEvent.nftContract = nftContract;
         newEvent.registeredCount = 0;
+
+        _nftContract.mint(address(this));
 
         emit EventCreated(eventId, _name, _date, _capacity, _nftContract);
     }
@@ -56,6 +66,11 @@ contract NFTGatedEventManager  {
 
         IERC721 nftContract = IERC721(eventToRegister.nftContract);
         require(nftContract.balanceOf(msg.sender) > 0, "You do not own the required NFT");
+
+        uint256 tokenId = nftContract.nextTokenID()
+
+        // research if token ID can be sent to multiple users
+        nftContract.safeTransferFrom(address(this), msg.sender, tokenId);
 
         eventToRegister.registeredAttendees[msg.sender] = true;
         eventToRegister.registeredCount++;

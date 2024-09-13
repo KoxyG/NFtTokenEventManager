@@ -9,9 +9,9 @@ contract NFTGatedFactory {
 
 
 
-    function createNFTGatedEventManager() external returns (NFTGatedEventManager newEvent_, uint256 length_) {
+    function createNFTGatedEventManager(address nftContract) external returns (NFTGatedEventManager newEvent_, uint256 length_) {
 
-        newEvent_ = new NFTGatedEventManager();
+        newEvent_ = new NFTGatedEventManager(nftContract);
 
         nFTGatedEventManagerClones.push(newEvent_);
 

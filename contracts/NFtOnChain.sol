@@ -12,12 +12,15 @@ contract NftOnchain is ERC721URIStorage {
 
     //events
     event Minted(string tokenURI);
+    string public svg; 
 
 
 
-    constructor() ERC721("NftOnchain", "NFT") {}
+    constructor(string memory _svg) ERC721("NftOnchain", "NFT") {
+        svg = _svg;
+    }
 
-    uint256  nextTokenID;
+    uint256 public nextTokenID;
 
 
     function svgToImageURI(
@@ -49,13 +52,13 @@ contract NftOnchain is ERC721URIStorage {
     }
 
 
-     function mint(string memory svg) external {
+     function mint(address to) external {
         string memory imageURI = svgToImageURI(svg);
         string memory tokenURI = formatTokenURI(imageURI);
         
         nextTokenID++;
 
-        _safeMint(msg.sender, nextTokenID);
+        _safeMint(to, nextTokenID);
         _setTokenURI(nextTokenID, tokenURI);
        
 

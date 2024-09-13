@@ -8,7 +8,7 @@ const config: HardhatUserConfig = {
   networks: {
     // for testnet
     "lisk-sepolia": {
-      url: process.env.LISK_SEPOLIA!,
+      url: `https://eth-sepolia.g.alchemy.com/v2`!,
       accounts: [process.env.ACCOUNT_PRIVATE_KEY!],
       gasPrice: 1000000000,
     },
@@ -21,7 +21,6 @@ const config: HardhatUserConfig = {
   etherscan: {
     // Use "123" as a placeholder, because Blockscout doesn't need a real API key, and Hardhat will complain if this property isn't set.
     apiKey: {
-      "sepolia"
       "lisk-sepolia": "123",
     },
     customChains: [
