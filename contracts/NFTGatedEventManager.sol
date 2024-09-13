@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 
 // write me an event manager smart contract, 
 //that people can create event on the smart contract, 
@@ -10,7 +9,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 // only that nft can permit them to register for that event .
 // This should be called an nft gated event manager
 
-contract NFTGatedEventManager is Ownable {
+contract NFTGatedEventManager  {
  
     // struct to hold event details
     struct Event {
@@ -33,13 +32,13 @@ contract NFTGatedEventManager is Ownable {
 
 
     
-    function createEvent(string memory _name, uint256 _date, uint256 _capacity, address _nftContract) external onlyOwner {
+    function createEvent(string memory _name, uint256 _date, uint256 _capacity, address _nftContract) external {
         require(_date > block.timestamp, "Event date must be in the future");
         require(_capacity > 0, "Capacity must be greater than zero");
         require(_nftContract != address(0), "Invalid NFT contract address");
 
         eventId++;
-        Event storage newEvent = events[eventCount];
+        Event storage newEvent = events[eventId];
         newEvent.name = _name;
         newEvent.date = _date;
         newEvent.capacity = _capacity;
