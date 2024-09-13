@@ -7,8 +7,8 @@ const config: HardhatUserConfig = {
   solidity: "0.8.24",
   networks: {
     // for testnet
-    "lisk-sepolia": {
-      url: process.env.LISK_RPC_URL!,
+    "sepolia": {
+      url: process.env.SEPOLIA!,
       accounts: [process.env.ACCOUNT_PRIVATE_KEY!],
       gasPrice: 1000000000,
     },
