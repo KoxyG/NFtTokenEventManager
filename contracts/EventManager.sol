@@ -24,7 +24,7 @@ contract NFTGatedEventManager is Ownable {
     mapping(uint256 => Event) public events;
 
 
-    uint256 public eventCount;
+    uint256 public eventId;
 
 
     //blockchain events 
@@ -38,7 +38,7 @@ contract NFTGatedEventManager is Ownable {
         require(_capacity > 0, "Capacity must be greater than zero");
         require(_nftContract != address(0), "Invalid NFT contract address");
 
-        eventCount++;
+        eventId++;
         Event storage newEvent = events[eventCount];
         newEvent.name = _name;
         newEvent.date = _date;
@@ -46,7 +46,7 @@ contract NFTGatedEventManager is Ownable {
         newEvent.nftContract = _nftContract;
         newEvent.registeredCount = 0;
 
-        emit EventCreated(eventCount, _name, _date, _capacity, _nftContract);
+        emit EventCreated(eventId, _name, _date, _capacity, _nftContract);
     }
 
     function registerForEvent(uint256 _eventId) external {
