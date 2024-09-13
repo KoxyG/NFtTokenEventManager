@@ -38,7 +38,7 @@ contract NftOnchain is ERC721URIStorage {
                     Base64.encode(
                         bytes(
                             abi.encodePacked(
-                                '{"name": "NFT ONCHAIN", "description": "A simple SVG based on-chain NFT", "image":"',
+                                '{"name": "EVENT NFT", "description": "NFT On Chain", "image":"',
                                 imageURI,
                                 '"}'
                             )
