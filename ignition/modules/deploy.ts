@@ -1,11 +1,11 @@
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
 
-const NFTGatedEventManagerModule = buildModule("NFTGatedEventManagerModule", (m) => {
+const NFTGatedFactoryModule = buildModule("NFTGatedFactoryModule", (m) => {
   
-  const nFTGatedEventManager = m.contract("NFTGatedEventManager");
+  const nFTGatedFactory = m.contract("NFTGatedFactory");
 
-  return { nFTGatedEventManager };
+  return { nFTGatedFactory };
 });
 
-export default NFTGatedEventManagerModule;
+export default NFTGatedFactoryModule;

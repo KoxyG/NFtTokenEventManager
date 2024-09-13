@@ -3,7 +3,8 @@ pragma solidity ^0.8.9;
 
 import "./NFTGatedEventManager.sol";
 
-contract MultisigFactory {
+contract NFTGatedFactory {
+    
     NFTGatedEventManager[] nFTGatedEventManagerClones;
     event NFTGatedEventManagerCreated(address indexed newManager, address indexed creator);
 
