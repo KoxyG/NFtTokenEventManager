@@ -18,16 +18,17 @@ contract NftOnchain is ERC721URIStorage {
 
     constructor(string memory _svg) ERC721("NftOnchain", "NFT") {
         svg = _svg;
+        mint(msg.sender);
     }
 
     uint256 public nextTokenID;
 
 
     function svgToImageURI(
-        string memory svg
+        string memory _svg
     ) public pure returns (string memory) {
         string memory baseURL = "data:image/svg+xml;base64,";
-        string memory svgBase64Encoded = Base64.encode(bytes(svg));
+        string memory svgBase64Encoded = Base64.encode(bytes(_svg));
         return string(abi.encodePacked(baseURL, svgBase64Encoded));
     }
 
@@ -52,7 +53,7 @@ contract NftOnchain is ERC721URIStorage {
     }
 
 
-     function mint(address to) external {
+     function mint(address to) public {
         string memory imageURI = svgToImageURI(svg);
         string memory tokenURI = formatTokenURI(imageURI);
         

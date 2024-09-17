@@ -1,24 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "./NftOnchain.sol";
+import "../NFtOnChain.sol";
 
 contract NftOnchainFactory {
-    
-   NftOnchainFactory[] NftOnchainFactoryClones;
+    NftOnchain[] public nftOnchainClones;
 
-
-
-    function createNftOnchainFactory(string memory svg) external returns (NftOnchainFactory newNft_, uint256 length_) {
-
-        newNft_ = new NftOnchain(svg);
-
-        nftOnchainFactoryClones.push(newNft_);
-
-        length_ = nftOnchainFactoryClones.length;
+    function createNftOnchain(string memory svg) external returns (NftOnchain newNft, uint256 length) {
+        newNft = new NftOnchain(svg);
+        nftOnchainClones.push(newNft);
+        length = nftOnchainClones.length;
     }
 
-    function getNftOnchainFactoryClones() external view returns(NftOnchainFactory[] memory) {
-        return nftOnchainFactoryClones;
+    function getNftOnchainClones() external view returns(NftOnchain[] memory) {
+        return nftOnchainClones;
     }
 }

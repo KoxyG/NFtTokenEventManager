@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "./NFTGatedEventManager.sol";
+import "../NFTGatedEventManager.sol";
 
 contract NFTGatedFactory {
     
@@ -9,9 +9,9 @@ contract NFTGatedFactory {
 
 
 
-    function createNFTGatedEventManager(address nftContract) external returns (NFTGatedEventManager newEvent_, uint256 length_) {
+    function createNFTGatedEventManager() external returns (NFTGatedEventManager newEvent_, uint256 length_) {
 
-        newEvent_ = new NFTGatedEventManager(nftContract);
+        newEvent_ = new NFTGatedEventManager();
 
         nFTGatedEventManagerClones.push(newEvent_);
 
