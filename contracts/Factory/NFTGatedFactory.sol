@@ -7,8 +7,6 @@ contract NFTGatedFactory {
     
     NFTGatedEventManager[] nFTGatedEventManagerClones;
 
-
-
     function createNFTGatedEventManager() external returns (NFTGatedEventManager newEvent_, uint256 length_) {
 
         newEvent_ = new NFTGatedEventManager();

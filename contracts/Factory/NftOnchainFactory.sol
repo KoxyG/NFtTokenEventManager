@@ -6,8 +6,9 @@ import "../NFtOnChain.sol";
 contract NftOnchainFactory {
     NftOnchain[] public nftOnchainClones;
 
-    function createNftOnchain(string memory svg) external returns (NftOnchain newNft, uint256 length) {
-        newNft = new NftOnchain(svg);
+
+    function createNftOnchain() external returns (NftOnchain newNft, uint256 length) {
+        newNft = new NftOnchain();
         nftOnchainClones.push(newNft);
         length = nftOnchainClones.length;
     }

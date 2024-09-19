@@ -41,7 +41,8 @@ contract NFTGatedEventManager  {
         require(_nftContract != address(0), "Invalid NFT contract address");
 
         INftOnchain nftContract_ = INftOnchain(_nftContract);
-        uint256 requiredTokenId = nftContract_.nextTokenID() - 1;
+
+        uint256 requiredTokenId = nftContract_.nextTokenID();
         require(nftContract_.ownerOf(requiredTokenId) == msg.sender, "You don't own the latest NFT");
 
         eventId++;
@@ -60,22 +61,23 @@ contract NFTGatedEventManager  {
 
 
 
-    function registerForEvent(uint256 _eventId) external {
-        Event storage eventToRegister = events[_eventId];
+    function registerForEvent() external {
+        Event storage eventToRegister = events[eventId];
         require(eventToRegister.date > block.timestamp, "Event has already occurred");
         require(eventToRegister.registeredCount < eventToRegister.capacity, "Event is full");
         require(!eventToRegister.registeredAttendees[msg.sender], "You are already registered");
 
         // Get the current token ID and mint a new NFT for the registrant
         INftOnchain nftContract_ = INftOnchain(eventToRegister.nftContract);
-        uint256 currentTokenId = nftContract_.nextTokenID();
+
+        nftContract_.nextTokenID();
         nftContract_.mint(msg.sender);
 
       
         eventToRegister.registeredAttendees[msg.sender] = true;
         eventToRegister.registeredCount++;
 
-        emit UserRegistered(_eventId, msg.sender);
+        emit UserRegistered(eventId, msg.sender);
     }
 
     function getEventDetails(uint256 _eventId) external view returns (string memory, uint256, uint256, address, uint256) {

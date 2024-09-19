@@ -6,31 +6,82 @@ import {
   import { expect } from "chai";
   import hre from "hardhat";
   
-  describe("Lock", function () {
+  describe("NftEventManger", function () {
     // We define a fixture to reuse the same setup in every test.
     // We use loadFixture to run this setup once, snapshot that state,
     // and reset Hardhat Network to that snapshot in every test.
-    async function deployOneYearLockFixture() {
-      const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-      const ONE_GWEI = 1_000_000_000;
+    async function NftOnchainFactory() {
+      const [owner] = await hre.ethers.getSigners();
   
-      const lockedAmount = ONE_GWEI;
-      const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS;
+      const nftOnchainFactory = await hre.ethers.getContractFactory("NftOnchainFactory");
+
+      const NftFactory = await nftOnchainFactory.deploy();
   
-      // Contracts are deployed using the first signer/account by default
-      const [owner, otherAccount] = await hre.ethers.getSigners();
+      return { NftFactory, owner};
+    }
+
+    async function NftEventFactory() {
+      
+      const [owner] = await hre.ethers.getSigners();
   
-      const Lock = await hre.ethers.getContractFactory("Lock");
-      const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+      const nFTGatedFactory = await hre.ethers.getContractFactory("NFTGatedFactory");
+      const NFTGatedFactory = await nFTGatedFactory.deploy();
   
-      return { lock, unlockTime, lockedAmount, owner, otherAccount };
+      return { NFTGatedFactory};
+    }
+
+    async function deployNewNft() {
+      const { NftFactory, owner } = await loadFixture(NftOnchainFactory);
+      const [otherAccount, signer1] = await hre.ethers.getSigners();
+
+      const tx = await NftFactory.createNftOnchain();
+      await tx.wait();
+
+      await (await tx).wait();
+      const newNft = await NftFactory.getNftOnchainClones()
+      const newNftAddress = newNft[0];
+
+      return { newNftAddress};
     }
   
-    describe("Deployment", function () {
-      it("Should set the right unlockTime", async function () {
-        // const { lock, unlockTime } = await loadFixture(deployOneYearLockFixture);
+    describe("NFT Factory", function () {
+      it("Should create new NFT contract", async function () {
+
+        const { NftFactory, owner } = await loadFixture(NftOnchainFactory);
+        const [otherAccount, signer1] = await hre.ethers.getSigners();
+
   
-        // expect(await lock.unlockTime()).to.equal(unlockTime);
+        const tx = await NftFactory.createNftOnchain();
+        await tx.wait();
+
+        await (await tx).wait();
+        const newNft = NftFactory.getNftOnchainClones()
+  
+        expect((await newNft).length).to.equal(1);
+      });
+
+      it("Should mint new nft with svg to the caller", async function () {
+        const newNftAddress = await deployNewNft();
+
+        const nft = await hre.ethers.getContractAt("NftOnchain", newNftAddress.newNftAddress);
+
+        const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='1024' height='1024'>
+        <defs><clipPath id='a'><path d='M0 0h1024v1024H0z'/></clipPath></defs>
+        <g clip-path='url(#a)'>
+          <path d='M0 0h1024v1024H0z'/>
+          <path fill='#fff' d='M0 241h1024v20H0zM0 502h1024v20H0zM0 763h1024v20H0z'/>
+          <path fill='#fff' d='M241 0h20v1024h-20z'/>
+        </g>
+      </svg>`;
+
+        const tx = await nft.mint(svg);
+        await tx.wait();
+
+        const mintedNft = await nft.tokenURI(0);
+
+        expect(mintedNft).to.equal(svg);
+
+
       });
   
       
